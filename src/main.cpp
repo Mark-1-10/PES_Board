@@ -44,9 +44,6 @@ int main()
     // create object to enable power electronics for the DC motors
     DigitalOut enable_motors(PB_ENABLE_DCMOTORS);
 
-    // enable hardwaredriver DC motors: 0 -> disabled, 1 -> enabled
-    enable_motors = 1;  
-
     // motor M1
     //FastPWM pwm_M1(PB_PWM_M1); // create FastPWM object to command motor M1
 
@@ -68,10 +65,8 @@ int main()
     // limit max. velocity to half physical possible velocity
     motor_M2.setMaxVelocity(motor_M2.getMaxPhysicalVelocity() * 0.5f);
 
-    // print to the serial terminal
-    printf("Motor velocity: %f \n", motor_M2.getVelocity());
-
-
+     // // limit max. acceleration to half of the default acceleration
+    motor_M2.setMaxAcceleration(motor_M2.getMaxAcceleration() * 0.5f);
 
     // mechanical button
     DigitalIn mechanical_button(PC_5); // create DigitalIn object to evaluate mechanical button, you
@@ -96,6 +91,9 @@ int main()
             // visual feedback that the main task is executed, setting this once would actually be enough
             led1 = 1;
 
+             // enable hardwaredriver DC motors: 0 -> disabled, 1 -> enabled
+             enable_motors = 1;  
+
 
         } else {
             // the following code block gets executed only once
@@ -104,8 +102,13 @@ int main()
 
                 // reset variables and objects
                 led1 = 0;
+                enable_motors = 0;
+
             }
         }
+
+        // print to the serial terminal
+        printf("Motor velocity: %f \n", motor_M2.getVelocity());
 
         // toggling the user led
         user_led = !user_led;
