@@ -82,10 +82,7 @@ int main()
     while (true) {
         main_task_timer.reset();
 
-        // limit max. velocity to half physical possible velocity
-        motor_M2.setMaxVelocity(motor_M2.getMaxPhysicalVelocity() * 0.5f);    
-
-
+       
         if (do_execute_main_task) {
 
             // visual feedback that the main task is executed, setting this once would actually be enough
@@ -93,7 +90,7 @@ int main()
 
              // enable hardwaredriver DC motors: 0 -> disabled, 1 -> enabled
              enable_motors = 1;  
-
+             motor_M2.setVelocity(motor_M2.getMaxVelocity());
 
         } else {
             // the following code block gets executed only once
@@ -102,7 +99,7 @@ int main()
 
                 // reset variables and objects
                 led1 = 0;
-                enable_motors = 0;
+                motor_M2.setVelocity(0.0f);
 
             }
         }
